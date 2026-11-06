@@ -1,0 +1,795 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Uniclínica Terê — Estética Avançada em Teresópolis, RJ</title>
+<meta name="description" content="Uniclínica Terê: estética avançada em Teresópolis, RJ. Tratamentos faciais, corporais e tecnologias com avaliação individual, na Vila Muqui (Ed. San Marino).">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;1,9..144,300&family=Manrope:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+/* ============ TOKENS ============ */
+:root{
+  --black:#8B5A3C;          /* marrom caramelo da identidade atual */
+  --white:#FFFFFF;
+  --paper:#F4EEE7;          /* areia clara */
+  --paper-2:#E7DFD6;
+  --form:#FAF7F3;
+  --accent:#5C3A24;         /* marrom escuro: só foco, item ativo, sublinhados, hover do botão */
+  --mark:#FFFFFF;           /* lótus branca, como na logo */
+  --text:#2B1D15;
+  --muted-dark:rgba(255,255,255,.85);
+  --muted-light:#6B5F57;
+  --line-dark:rgba(255,255,255,.18);
+  --line-light:rgba(0,0,0,.12);
+  --fallback:linear-gradient(135deg,#5C3A24,#8B5A3C);
+  --ease:cubic-bezier(0.22,1,0.36,1);
+  --ease-io:cubic-bezier(0.76,0,0.24,1);
+  --display:"Fraunces",Georgia,serif;
+  --sans:"Manrope",system-ui,sans-serif;
+  --pad:32px; --gut:24px;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:auto}
+body{margin:0;background:var(--paper);color:var(--text);font-family:var(--sans);font-size:15px;line-height:1.5;font-weight:400;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.label{font-size:11px;font-weight:500;letter-spacing:.06em;text-transform:uppercase}
+.display{font-family:var(--display);font-weight:300;letter-spacing:-.02em}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.media{position:relative;overflow:hidden;background:var(--fallback)}
+.media img{width:100%;height:100%;object-fit:cover}
+.mono{display:block}
+.mono path{fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round}
+.display em,.h2 em{font-style:italic;font-weight:300}
+
+/* ============ PRELOADER ============ */
+#preloader{position:fixed;inset:0;z-index:100;background:var(--black);color:var(--white);display:grid;place-items:center;transition:opacity .6s var(--ease) .5s}
+#preloader.out{opacity:0;pointer-events:none}
+.stack{position:relative;width:240px;height:300px;transition:transform 1.2s var(--ease-io),opacity 1s var(--ease-io)}
+#preloader.out .stack{transform:scale(1.6);opacity:0}
+.stack .card{position:absolute;inset:0;border-radius:2px;box-shadow:0 20px 50px rgba(0,0,0,.5);opacity:0;transform:rotate(var(--r)) translateY(14px);transition:opacity .35s var(--ease),transform .5s var(--ease)}
+.stack .card.on{opacity:1;transform:rotate(var(--r))}
+.pre-mono{position:absolute;left:50%;top:50%;width:170px;height:170px;transform:translate(-50%,-50%);color:var(--white);filter:drop-shadow(0 4px 16px rgba(0,0,0,.6))}
+.pre-mono path{stroke-dasharray:1;stroke-dashoffset:1;animation:draw 1.1s var(--ease) forwards}
+.pre-mono .d2{animation-delay:.25s}.pre-mono .d3{animation-delay:.5s}.pre-mono .d4{animation-delay:.1s}
+@keyframes draw{to{stroke-dashoffset:0}}
+.pre-meta{position:absolute;left:var(--pad);bottom:var(--pad);display:flex;gap:16px;align-items:baseline}
+.pre-count{font-variant-numeric:tabular-nums}
+
+/* ============ HEADER ============ */
+.site-header{position:fixed;top:0;left:0;right:0;z-index:50;height:64px;display:flex;align-items:center;justify-content:space-between;padding-left:var(--pad);color:var(--white);border-bottom:1px solid var(--line-dark);transition:background .5s var(--ease),color .5s var(--ease),border-color .5s var(--ease)}
+.site-header.light{background:rgba(244,238,231,.8);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);color:var(--text);border-color:var(--line-light)}
+.brand{display:flex;align-items:center;gap:10px}
+.brand .mono{width:22px;height:22px}
+.brand-text{display:flex;flex-direction:column;line-height:1.1}
+.brand-text b{font-family:var(--display);font-weight:500;font-size:15px;letter-spacing:.02em}
+.brand-text span{font-size:9px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;opacity:.8}
+.nav{position:absolute;left:50%;transform:translateX(-50%);display:flex;gap:32px}
+.nav a{font-size:11px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;position:relative}
+.nav a::after{content:"";position:absolute;left:0;right:0;bottom:-4px;height:1px;background:currentColor;transform:scaleX(0);transform-origin:left;transition:transform .5s var(--ease)}
+.nav a:hover::after{transform:scaleX(1)}
+.header-right{display:flex;align-items:center;height:100%}
+.lang{display:flex;align-items:center;gap:6px;margin-right:24px;background:none;border:0;cursor:pointer;font-size:11px;font-weight:500;letter-spacing:.06em}
+.lang svg{width:9px;height:9px}
+.cta{height:64px;display:flex;align-items:center;padding:0 28px;background:var(--white);color:var(--black);font-size:11px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;transition:background .4s var(--ease),color .4s var(--ease)}
+.site-header.light .cta{background:var(--black);color:var(--white)}
+.cta:hover{background:var(--accent);color:var(--white)}
+.menu-btn{display:none;background:none;border:0;cursor:pointer;font-size:11px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;margin-right:16px}
+.mobile-menu{position:fixed;inset:0;z-index:60;background:var(--black);color:var(--white);padding:96px var(--pad) var(--pad);display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:opacity .5s var(--ease)}
+.mobile-menu.open{opacity:1;pointer-events:auto}
+.mobile-menu a{font-family:var(--display);font-weight:300;font-size:40px;padding:10px 0;border-bottom:1px solid var(--line-dark);display:flex;justify-content:space-between}
+.mobile-menu .close{position:absolute;top:22px;right:var(--pad);background:none;border:0;color:inherit;cursor:pointer}
+
+/* ============ HERO ============ */
+.hero{position:relative;height:180vh;background:var(--black)}
+.hero-sticky{position:sticky;top:0;height:100vh;overflow:hidden;color:var(--white)}
+.hero-media{position:absolute;inset:0;will-change:clip-path}
+.hero-media img{transform:scale(1.15);transition:transform 1.2s var(--ease-io)}
+body.loaded .hero-media img{transform:scale(1)}
+.hero-media::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.35),rgba(0,0,0,.15) 40%,rgba(0,0,0,.55))}
+.grid-marks{position:absolute;inset:64px var(--pad) var(--pad);pointer-events:none}
+.grid-marks i{position:absolute;width:3px;height:3px;background:rgba(255,255,255,.4);transform:translate(-50%,-50%)}
+.hero-inner{position:absolute;inset:64px 0 0;padding:48px var(--pad) var(--pad)}
+.hero h1{margin:0;font-size:56px;line-height:1.05;max-width:560px}
+.hero h1 .w{display:inline-block;opacity:0;filter:blur(8px);transition:opacity .7s var(--ease),filter .7s var(--ease)}
+body.loaded .hero h1 .w{opacity:1;filter:blur(0)}
+.hero-intro{margin-top:28px;max-width:300px}
+.appear{opacity:0;transform:translateY(16px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
+.appear.in{opacity:1;transform:none}
+.sw{opacity:.3;transition:opacity .35s linear}
+.sw.lit{opacity:1}
+.hero-stats{position:absolute;top:48px;right:var(--pad);text-align:right}
+.hero-stats p{margin:0 0 6px}
+.hero-stats .num{font-family:var(--display);font-size:28px;font-weight:300;letter-spacing:-.02em;margin-right:8px}
+.hero-links{position:absolute;left:var(--pad);bottom:var(--pad);display:flex;gap:16px}
+.bracket{position:relative;padding:10px 16px;font-size:11px;font-weight:500;letter-spacing:.06em;text-transform:uppercase}
+.bracket::before,.bracket::after{content:"";position:absolute;width:8px;height:8px;border:1px solid currentColor;transition:all .5s var(--ease)}
+.bracket::before{top:0;left:0;border-right:0;border-bottom:0}
+.bracket::after{bottom:0;right:0;border-left:0;border-top:0}
+.bracket:hover::before,.bracket:hover::after{width:100%;height:100%}
+.hero-close{position:absolute;right:var(--pad);bottom:var(--pad);margin:0;font-size:44px;line-height:1.1;text-align:right;max-width:560px}
+
+/* ============ SECTION HEADS ============ */
+.sec-head{text-align:center;padding:120px var(--pad) 64px}
+.sec-head .label{color:var(--muted-light);display:block;margin-bottom:18px}
+.sec-head h2,.h2{margin:0;font-size:44px;line-height:1.1}
+
+/* ============ SOBRE ============ */
+.about{background:var(--paper)}
+.about-track{position:relative;height:240vh}
+.about-sticky{position:sticky;top:64px;height:calc(100vh - 64px);display:grid;grid-template-columns:repeat(12,1fr);gap:var(--gut);padding:24px var(--pad) 48px;align-items:center}
+.about-left{grid-column:1/5;align-self:stretch;display:flex;flex-direction:column;justify-content:space-between;padding:24px 0}
+.diffs{list-style:none;margin:0;padding:0}
+.diffs li{padding:10px 0;border-bottom:1px solid var(--line-light);color:var(--muted-light);transition:color .5s var(--ease),transform .5s var(--ease)}
+.diffs li.active{color:var(--accent);transform:translateX(12px)}
+.thumbs{display:grid;grid-template-columns:repeat(8,1fr);gap:4px;width:200px}
+.thumbs .media{aspect-ratio:3/4}
+.about-center{grid-column:5/9;display:flex;justify-content:center}
+.about-card{position:relative;width:360px;height:460px;max-width:100%}
+.about-card .media{position:absolute;inset:0}
+.about-card .m2{opacity:0;transition:opacity 1s var(--ease)}
+.about-card.swap .m2{opacity:1}
+.pill{position:absolute;top:16px;left:16px;z-index:2;background:var(--black);color:var(--white);padding:7px 14px;border-radius:999px}
+.about-right{grid-column:9/13}
+.mission{font-size:20px;line-height:1.45;margin:0}
+.mission .mw{color:#BFB3A8;transition:color .4s linear}
+.mission .mw.lit{color:var(--text)}
+.about-right .label{display:block;color:var(--muted-light);margin-bottom:16px}
+
+/* ============ SERVIÇOS ============ */
+.services{background:var(--paper);padding-bottom:200px}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--gut);padding:0 var(--pad)}
+.svc{position:relative;height:620px;will-change:transform;color:var(--white);display:block}
+.svc:nth-child(2){margin-top:120px}
+.svc .media{position:absolute;inset:0}
+.svc .media img{transition:transform .9s var(--ease)}
+.svc:hover .media img{transform:scale(1.06)}
+.svc .media::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(0,0,0,.55))}
+.svc h3{position:absolute;left:0;right:0;bottom:28px;margin:0;text-align:center;font-size:13px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;z-index:2}
+
+/* ============ PROCESSO ============ */
+.process{position:relative;height:500vh;background:var(--black);color:var(--white)}
+.process-sticky{position:sticky;top:0;height:100vh;overflow:hidden;display:flex;flex-direction:column;align-items:center}
+.process h2{margin:96px 0 0;color:var(--muted-dark)}
+.steps-wrap{position:relative;flex:1;width:100%;perspective:1200px}
+.step-card{position:absolute;left:50%;top:50%;width:420px;height:300px;margin:-150px 0 0 -210px;transform:rotateX(12deg) rotateZ(-8deg);transform-style:preserve-3d;z-index:0}
+.step-card .media{position:absolute;inset:0;transform-origin:center;transition:transform .5s var(--ease)}
+.step-card .media.flip{transform:rotateY(90deg);transition:none}
+.step-card .media::after{content:"";position:absolute;inset:0;background:rgba(0,0,0,.35)}
+.steps{position:absolute;left:0;right:0;top:50%;margin:0;padding:0;list-style:none;text-align:center;z-index:1;transition:transform .6s var(--ease)}
+.steps li{font-family:var(--display);font-weight:300;letter-spacing:-.02em;font-size:64px;line-height:1;height:80px;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.25);filter:blur(6px);transition:color .6s var(--ease),filter .6s var(--ease)}
+.steps li.active{color:var(--white);filter:none}
+.steps li .n{font-family:var(--sans);font-size:14px;letter-spacing:.06em;margin-right:16px;vertical-align:middle}
+.step-text{max-width:320px;text-align:center;margin:0 auto 72px;min-height:68px;color:var(--muted-dark);transition:opacity .4s var(--ease)}
+
+/* ============ EQUIPE ============ */
+.team{background:var(--paper);padding:120px var(--pad)}
+.team-head{display:grid;grid-template-columns:repeat(12,1fr);gap:var(--gut);margin-bottom:56px;align-items:end}
+.team-head h2{grid-column:1/7}
+.team-head p{grid-column:9/13;margin:0;color:var(--muted-light)}
+.member{display:grid;grid-template-columns:repeat(12,1fr);gap:var(--gut);align-items:center;background:var(--paper-2);padding:24px;border-top:1px solid var(--line-light);opacity:0;filter:blur(10px);transition:opacity .8s var(--ease),filter .8s var(--ease)}
+.member:last-child{border-bottom:1px solid var(--line-light)}
+.member.in{opacity:1;filter:none}
+.member .label{grid-column:1/3;color:var(--muted-light)}
+.member h3{grid-column:3/5;margin:0;font-size:24px;font-weight:300;font-family:var(--display);letter-spacing:-.01em}
+.member .bio{grid-column:5/8;margin:0;color:var(--muted-light)}
+.member .media{grid-column:8/9;width:120px;height:120px}
+.member .tag{grid-column:9/11;justify-self:start;border:1px solid var(--line-light);border-radius:999px;padding:6px 12px}
+.member .yrs{grid-column:11/13;justify-self:end;text-align:right}
+
+/* ============ CONTATO ============ */
+.contact{position:relative;height:100vh;min-height:760px;display:flex;color:var(--text)}
+.contact-bg{position:absolute;inset:0}
+.sidebar{position:relative;z-index:2;width:220px;background:var(--black);color:var(--white);display:flex;flex-direction:column;padding:24px 0}
+.sidebar .brand{padding:0 20px 32px}
+.sidebar .brand .mono{color:var(--mark)}
+.side-nav a{display:flex;justify-content:space-between;align-items:center;height:44px;padding:0 20px;border-top:1px solid var(--line-dark);font-size:11px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;transition:background .4s var(--ease)}
+.side-nav a:last-child{border-bottom:1px solid var(--line-dark)}
+.side-nav a:hover{background:rgba(255,255,255,.06)}
+.form-panel{position:absolute;z-index:2;right:0;bottom:0;top:32px;width:46%;background:var(--form);padding:40px 48px;overflow:auto}
+.form-panel .label.k{color:var(--muted-light);display:block;margin-bottom:12px}
+.form-panel h2{margin:0 0 28px}
+.field{margin-bottom:18px;position:relative}
+.field label{display:block;font-size:11px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px}
+.field input,.field select,.field textarea{width:100%;font-size:13px;background:transparent;border:0;border-bottom:1px solid rgba(0,0,0,.25);border-radius:0;padding:8px 0 9px;outline:none;transition:border-color .3s var(--ease)}
+.field input:focus,.field select:focus,.field textarea:focus{border-bottom:2px solid var(--accent);padding-bottom:8px}
+.field textarea{height:220px;resize:vertical}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.phone{display:flex;align-items:flex-end;gap:10px}
+.phone .flag{display:flex;align-items:center;gap:6px;font-size:13px;padding:8px 0 9px;border-bottom:1px solid rgba(0,0,0,.25);white-space:nowrap}
+.select-wrap{position:relative}
+.select-wrap select{appearance:none;-webkit-appearance:none;padding-right:24px;cursor:pointer}
+.select-wrap svg{position:absolute;right:2px;bottom:14px;width:10px;height:10px;pointer-events:none}
+.err{display:block;color:#A3362B;font-size:11px;margin-top:4px;min-height:0}
+.field.invalid input,.field.invalid select,.field.invalid textarea{border-bottom-color:#A3362B}
+.consent{display:flex;gap:10px;align-items:flex-start;font-size:13px;margin:6px 0 18px}
+.consent input{margin-top:3px;accent-color:var(--black)}
+.consent a{text-decoration:underline;text-decoration-color:var(--accent);text-underline-offset:3px}
+.submit{width:100%;height:48px;border:0;background:var(--black);color:var(--white);font-size:11px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;transition:background .4s var(--ease)}
+.submit:hover{background:var(--accent)}
+.success{display:none;padding:16px;background:var(--black);color:var(--white);margin-top:16px;font-size:13px}
+.success.show{display:block}
+
+/* ============ RODAPÉ ============ */
+.footer{background:var(--black);color:var(--muted-dark);padding:20px var(--pad);display:flex;flex-wrap:wrap;gap:16px 32px;justify-content:space-between;align-items:center;font-size:12px}
+.footer nav{display:flex;gap:24px;flex-wrap:wrap}
+.footer a:hover{color:var(--white)}
+.footer .contacts{display:flex;gap:20px;flex-wrap:wrap}
+.footer .contacts a{text-decoration:underline;text-decoration-color:var(--accent);text-underline-offset:3px}
+
+/* ============ RESPONSIVO ============ */
+@media (max-width:899px){
+  :root{--pad:16px}
+  .nav,.lang{display:none}
+  .menu-btn{display:block}
+  .cta{height:40px;padding:0 14px;margin-right:16px}
+  .brand-text{display:none}
+  .hero-inner{display:flex;flex-direction:column;gap:20px;padding-top:32px}
+  .hero h1{font-size:44px}
+  .hero-intro{margin-top:0}
+  .hero-stats,.hero-links,.hero-close{position:static;text-align:left}
+  .hero-stats .num{font-size:24px}
+  .hero-close{font-size:32px;margin-top:auto}
+  .sec-head{padding:80px var(--pad) 40px}
+  .sec-head h2,.h2{font-size:34px}
+  .about-track{height:auto}
+  .about-sticky{position:static;height:auto;display:flex;flex-direction:column;gap:40px;align-items:stretch}
+  .about-center{order:-1}
+  .about-card{width:100%;height:auto;aspect-ratio:360/460}
+  .services{padding-bottom:80px}
+  .cards{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:12px;padding:0 var(--pad) 8px}
+  .svc{flex:0 0 80%;height:440px;scroll-snap-align:center;transform:none!important}
+  .svc:nth-child(2){margin-top:0}
+  .steps li{font-size:32px;height:48px}
+  .steps li .n{font-size:11px}
+  .step-card{width:260px;height:190px;margin:-95px 0 0 -130px}
+  .team{padding:80px var(--pad)}
+  .team-head{display:block}
+  .team-head p{margin-top:16px}
+  .member{display:flex;flex-direction:column;align-items:flex-start;gap:10px}
+  .member .media{width:96px;height:96px;order:3}
+  .member .bio{order:2}
+  .member .label{order:0}.member h3{order:1}
+  .member .meta-line{order:4}
+  .member .tag,.member .yrs{justify-self:auto}
+  .contact{height:auto;min-height:0;flex-direction:column}
+  .sidebar{display:none}
+  .contact-bg{position:relative;height:40vh}
+  .form-panel{position:static;width:100%;padding:32px var(--pad)}
+  .row2{grid-template-columns:1fr;gap:0}
+}
+@media (min-width:900px){ .member .meta-line{display:contents} }
+@media (max-width:899px){ .member .meta-line{display:flex;gap:16px;align-items:center;width:100%;justify-content:space-between} }
+
+/* ============ MOVIMENTO REDUZIDO ============ */
+@media (prefers-reduced-motion:reduce){
+  #preloader{display:none}
+  *,*::before,*::after{transition-duration:0s!important;animation:none!important}
+  .hero h1 .w,.appear,.member{opacity:1;filter:none;transform:none}
+  .steps li{filter:none}
+  .hero-media img{transform:none}
+}
+</style>
+</head>
+<body>
+
+<!-- Logo reutilizável: flor de lótus em linha (identidade atual da clínica) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="mono" viewBox="0 0 200 200">
+    <g fill="none" stroke="currentColor" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M100 150 C80 120,80 70,100 38 C120 70,120 120,100 150"/>
+      <path d="M100 150 C70 130,55 92,60 58 C90 80,106 115,100 150"/>
+      <path d="M100 150 C130 130,145 92,140 58 C110 80,94 115,100 150"/>
+      <path d="M100 150 C62 145,32 122,22 92 C56 95,86 120,100 150"/>
+      <path d="M100 150 C138 145,168 122,178 92 C144 95,114 120,100 150"/>
+      <path d="M100 150 C70 156,32 152,8 136 C44 124,80 134,100 150"/>
+      <path d="M100 150 C130 156,168 152,192 136 C156 124,120 134,100 150"/>
+    </g>
+  </symbol>
+</svg>
+
+<!-- PRELOADER -->
+<div id="preloader" aria-hidden="true">
+  <div class="stack" id="stack"></div>
+  <svg class="pre-mono mono" viewBox="0 0 200 200">
+    <path pathLength="1" stroke-width="3.5" d="M100 150 C80 120,80 70,100 38 C120 70,120 120,100 150"/>
+    <path class="d2" pathLength="1" stroke-width="3.5" d="M100 150 C70 130,55 92,60 58 C90 80,106 115,100 150"/>
+    <path class="d2" pathLength="1" stroke-width="3.5" d="M100 150 C130 130,145 92,140 58 C110 80,94 115,100 150"/>
+    <path class="d3" pathLength="1" stroke-width="3.5" d="M100 150 C62 145,32 122,22 92 C56 95,86 120,100 150"/>
+    <path class="d3" pathLength="1" stroke-width="3.5" d="M100 150 C138 145,168 122,178 92 C144 95,114 120,100 150"/>
+    <path class="d4" pathLength="1" stroke-width="3.5" d="M100 150 C70 156,32 152,8 136 C44 124,80 134,100 150"/>
+    <path class="d4" pathLength="1" stroke-width="3.5" d="M100 150 C130 156,168 152,192 136 C156 124,120 134,100 150"/>
+  </svg>
+  <div class="pre-meta"><span class="label">Carregando</span><span class="label pre-count" id="count">0</span></div>
+</div>
+
+<!-- HEADER -->
+<header class="site-header" id="header">
+  <a href="#inicio" class="brand" data-scroll aria-label="Uniclínica Terê — início">
+    <svg class="mono" aria-hidden="true"><use href="#mono"/></svg>
+    <span class="brand-text"><b>Uniclínica Terê</b><span>Estética Avançada</span></span>
+  </a>
+  <nav class="nav" aria-label="Principal">
+    <a href="#sobre" data-scroll>Sobre</a>
+    <a href="#tratamentos" data-scroll>Tratamentos</a>
+    <a href="#processo" data-scroll>Processo</a>
+    <a href="#diferenciais" data-scroll>Diferenciais</a>
+    <a href="#contato" data-scroll>Contato</a>
+  </nav>
+  <div class="header-right">
+    <button class="lang" type="button" aria-label="Idioma: Português">PT
+      <svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 3l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>
+    </button>
+    <button class="menu-btn" type="button" id="menuBtn" aria-expanded="false" aria-controls="mobileMenu">Menu</button>
+    <a href="#contato" class="cta" data-scroll>Agendar avaliação</a>
+  </div>
+</header>
+
+<div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+  <button class="close label" type="button" id="menuClose">Fechar</button>
+  <a href="#sobre" data-scroll>Sobre <span>→</span></a>
+  <a href="#tratamentos" data-scroll>Tratamentos <span>→</span></a>
+  <a href="#processo" data-scroll>Processo <span>→</span></a>
+  <a href="#diferenciais" data-scroll>Diferenciais <span>→</span></a>
+  <a href="#contato" data-scroll>Contato <span>→</span></a>
+</div>
+
+<main>
+<!-- HERO -->
+<section class="hero" id="inicio" aria-label="Apresentação">
+  <div class="hero-sticky">
+    <div class="hero-media media" id="heroMedia">
+      <img src="img/hero.jpg" width="2400" height="1600" alt="Tratamento facial com tecnologia em cabine de estética" fetchpriority="high" onerror="this.style.display='none'">
+    </div>
+    <div class="grid-marks" id="gridMarks" aria-hidden="true"></div>
+    <div class="hero-inner">
+      <h1 class="display" id="heroTitle">Ciência que embeleza.</h1>
+      <p class="hero-intro appear" data-hero-appear><span class="scrollwords">Protocolos de estética avançada que unem tecnologia, técnica e avaliação individual para resultados seguros e naturais.</span></p>
+      <div class="hero-stats appear" data-hero-appear>
+        <p><span class="num sw">4,7★</span><span class="label sw">nota no Google</span></p>
+        <p><span class="num sw">1:1</span><span class="label sw">avaliação individual</span></p>
+        <p><span class="num sw">3</span><span class="label sw">frentes: rosto, corpo e sobrancelhas</span></p>
+      </div>
+      <div class="hero-links appear" data-hero-appear>
+        <a href="#tratamentos" class="bracket" data-scroll>Ver tratamentos</a>
+        <a href="#processo" class="bracket" data-scroll>Como funciona</a>
+      </div>
+      <p class="hero-close display appear" data-hero-appear>Tecnologia que cuida.<br><em>Resultado que aparece.</em></p>
+    </div>
+  </div>
+</section>
+
+<!-- SOBRE -->
+<section class="about" id="sobre" aria-labelledby="sobre-t">
+  <div class="sec-head">
+    <span class="label">Uniclínica Terê · Estética Avançada</span>
+    <h2 id="sobre-t" class="display">Estética avançada,<br><em>cuidado de perto.</em></h2>
+  </div>
+  <div class="about-track" id="aboutTrack">
+    <div class="about-sticky">
+      <div class="about-left">
+        <ul class="diffs" id="diffs">
+          <li>Avaliação individual antes de qualquer protocolo</li>
+          <li>Limpeza de pele e peeling de diamante</li>
+          <li>Pacotes faciais e corporais combinados</li>
+          <li>Ambiente reservado e acolhedor</li>
+          <li>Localização central, na Vila Muqui</li>
+        </ul>
+        <div class="thumbs" aria-hidden="true">
+          <div class="media"><img src="img/about-1.jpg" width="900" height="1200" alt="" loading="lazy" onerror="this.style.display='none'"></div>
+          <div class="media"><img src="img/service-1.jpg" width="1200" height="1500" alt="" loading="lazy" onerror="this.style.display='none'"></div>
+          <div class="media"><img src="img/step-1.jpg" width="1000" height="1200" alt="" loading="lazy" onerror="this.style.display='none'"></div>
+          <div class="media"><img src="img/service-2.jpg" width="1200" height="1500" alt="" loading="lazy" onerror="this.style.display='none'"></div>
+          <div class="media"><img src="img/about-2.jpg" width="900" height="1200" alt="" loading="lazy" onerror="this.style.display='none'"></div>
+          <div class="media"><img src="img/step-3.jpg" width="1000" height="1200" alt="" loading="lazy" onerror="this.style.display='none'"></div>
+          <div class="media"><img src="img/service-3.jpg" width="1200" height="1500" alt="" loading="lazy" onerror="this.style.display='none'"></div>
+          <div class="media"><img src="img/step-5.jpg" width="1000" height="1200" alt="" loading="lazy" onerror="this.style.display='none'"></div>
+        </div>
+      </div>
+      <div class="about-center">
+        <div class="about-card" id="aboutCard">
+          <span class="pill label">Sobre nós</span>
+          <div class="media m1"><img src="img/about-1.jpg" width="900" height="1200" alt="Cabine de atendimento estético" loading="lazy" onerror="this.style.display='none'"></div>
+          <div class="media m2"><img src="img/about-2.jpg" width="900" height="1200" alt="Sala de atendimento com maca estética" loading="lazy" onerror="this.style.display='none'"></div>
+        </div>
+      </div>
+      <div class="about-right">
+        <span class="label">Nosso propósito</span>
+        <p class="mission" id="mission">Unir ciência, tecnologia e atenção individual para entregar resultados seguros e naturais, que fazem você se sentir bem na própria pele.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCEDIMENTOS -->
+<section class="services" id="tratamentos" aria-labelledby="trat-t">
+  <div class="sec-head">
+    <span class="label">Tratamentos</span>
+    <h2 id="trat-t" class="display">Protocolos avançados<br><em>para face e corpo.</em></h2>
+  </div>
+  <div class="cards">
+    <a href="#contato" class="svc" data-speed="0.9" data-scroll>
+      <div class="media"><img src="img/service-1.jpg" width="1200" height="1500" alt="Esteticista realizando massagem facial" loading="lazy" onerror="this.style.display='none'"></div>
+      <h3>Estética Facial</h3>
+    </a>
+    <a href="#contato" class="svc" data-speed="1.1" data-scroll>
+      <div class="media"><img src="img/service-2.jpg" width="1200" height="1500" alt="Massagem corporal relaxante" loading="lazy" onerror="this.style.display='none'"></div>
+      <h3>Estética Corporal</h3>
+    </a>
+    <a href="#contato" class="svc" data-speed="0.9" data-scroll>
+      <div class="media"><img src="img/service-3.jpg" width="1200" height="1500" alt="Limpeza de pele com máscara facial" loading="lazy" onerror="this.style.display='none'"></div>
+      <h3>Limpeza de Pele</h3>
+    </a>
+  </div>
+</section>
+
+<!-- PROCESSO -->
+<section class="process" id="processo" aria-labelledby="processo-t">
+  <div class="process-sticky">
+    <h2 id="processo-t" class="label">Nosso processo</h2>
+    <div class="steps-wrap">
+      <div class="step-card" aria-hidden="true"><div class="media" id="stepMedia"><img id="stepImg" src="img/step-1.jpg" width="1000" height="1200" alt="" loading="lazy" onerror="this.style.display='none'"></div></div>
+      <ol class="steps" id="steps">
+        <li class="active"><span class="n">01 /</span>Avaliação</li>
+        <li><span class="n">02 /</span>Protocolo sob medida</li>
+        <li><span class="n">03 /</span>Tratamento</li>
+        <li><span class="n">04 /</span>Cuidado em casa</li>
+        <li><span class="n">05 /</span>Resultado</li>
+      </ol>
+    </div>
+    <p class="step-text" id="stepText" aria-live="polite"></p>
+  </div>
+</section>
+
+<!-- EQUIPE -->
+<section class="team" id="diferenciais" aria-labelledby="dif-t">
+  <div class="team-head">
+    <h2 id="dif-t" class="h2 display">O cuidado avançado<br><em>em cada detalhe.</em></h2>
+    <p>Do primeiro contato ao resultado, cada etapa é pensada para ser segura, clara e feita sob medida para você.</p>
+  </div>
+  <div class="members">
+    <article class="member">
+      <span class="label">01 // Avaliação</span>
+      <h3>Diagnóstico individual</h3>
+      <p class="bio">Analisamos sua pele, seu corpo e sua rotina antes de indicar qualquer tratamento.</p>
+      <div class="media"><img src="img/team-1.jpg" width="600" height="600" alt="Produtos de cuidado com a pele" loading="lazy" onerror="this.style.display='none'"></div>
+      <div class="meta-line"><span class="tag label">Sob medida</span><span class="yrs label">Antes de tudo</span></div>
+    </article>
+    <article class="member">
+      <span class="label">02 // Tecnologia</span>
+      <h3>Estética avançada</h3>
+      <p class="bio">Equipamentos e técnicas atuais combinados em protocolos que potencializam o resultado.</p>
+      <div class="media"><img src="img/team-2.jpg" width="600" height="600" alt="Aparelho de tecnologia estética em uso" loading="lazy" onerror="this.style.display='none'"></div>
+      <div class="meta-line"><span class="tag label">Face e corpo</span><span class="yrs label">Protocolos combinados</span></div>
+    </article>
+    <article class="member">
+      <span class="label">03 // Clínica</span>
+      <h3>Vila Muqui</h3>
+      <p class="bio">Ed. San Marino — R. Heitor de Moura Estevão, 229, sala 421, Teresópolis/RJ.</p>
+      <div class="media"><img src="img/team-3.jpg" width="600" height="600" alt="Sala de atendimento da clínica" loading="lazy" onerror="this.style.display='none'"></div>
+      <div class="meta-line"><span class="tag label">Sala 421</span><span class="yrs label">Atendimento até 18h30</span></div>
+    </article>
+  </div>
+</section>
+
+<!-- CONTATO -->
+<section class="contact" id="contato" aria-labelledby="contato-t">
+  <aside class="sidebar" aria-label="Navegação lateral">
+    <a href="#inicio" class="brand" data-scroll>
+      <svg class="mono" aria-hidden="true"><use href="#mono"/></svg>
+      <span class="brand-text"><b>Uniclínica Terê</b><span>Estética Avançada</span></span>
+    </a>
+    <nav class="side-nav" aria-label="Seções">
+      <a href="#sobre" data-scroll>Sobre <span aria-hidden="true">→</span></a>
+      <a href="#tratamentos" data-scroll>Tratamentos <span aria-hidden="true">→</span></a>
+      <a href="#processo" data-scroll>Processo <span aria-hidden="true">→</span></a>
+      <a href="#diferenciais" data-scroll>Diferenciais <span aria-hidden="true">→</span></a>
+      <a href="#contato" data-scroll>Contato <span aria-hidden="true">→</span></a>
+    </nav>
+  </aside>
+  <div class="contact-bg media"><img src="img/contact.jpg" width="2000" height="1400" alt="Mulher aplicando cuidados na pele" loading="lazy" onerror="this.style.display='none'"></div>
+  <div class="form-panel">
+    <span class="label k">Contato</span>
+    <h2 id="contato-t" class="h2 display">Agende sua avaliação.</h2>
+    <form id="form" novalidate>
+      <div class="row2">
+        <div class="field">
+          <label for="f-nome">Nome</label>
+          <input id="f-nome" name="nome" type="text" autocomplete="name" required aria-required="true">
+          <span class="err" aria-live="polite"></span>
+        </div>
+        <div class="field">
+          <label for="f-tel">Telefone / WhatsApp</label>
+          <div class="phone">
+            <span class="flag" aria-label="Brasil, +55">🇧🇷 +55</span>
+            <input id="f-tel" name="telefone" type="tel" inputmode="numeric" autocomplete="tel-national" placeholder="(21) 99999-9999" maxlength="15" required aria-required="true">
+          </div>
+          <span class="err" aria-live="polite"></span>
+        </div>
+      </div>
+      <div class="row2">
+        <div class="field">
+          <label for="f-email">E-mail (opcional)</label>
+          <input id="f-email" name="email" type="email" autocomplete="email">
+          <span class="err" aria-live="polite"></span>
+        </div>
+        <div class="field">
+          <label for="f-proc">Tratamento de interesse</label>
+          <div class="select-wrap">
+            <select id="f-proc" name="procedimento" required aria-required="true">
+              <option value="">Selecione</option>
+              <option>Limpeza de pele</option>
+              <option>Peeling de diamante</option>
+              <option>Design de sobrancelhas</option>
+              <option>Pacote facial (limpeza + peeling + sobrancelha)</option>
+              <option>Tratamento corporal / redução de barriga</option>
+              <option>Rejuvenescimento facial</option>
+              <option>Ainda não sei — quero uma avaliação</option>
+            </select>
+            <svg viewBox="0 0 10 10" aria-hidden="true"><path d="M1 3l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>
+          </div>
+          <span class="err" aria-live="polite"></span>
+        </div>
+      </div>
+      <div class="field">
+        <label for="f-local">Localização</label>
+        <input id="f-local" name="localizacao" type="text" placeholder="Bairro / cidade" autocomplete="address-level2">
+      </div>
+      <div class="field">
+        <label for="f-msg">Conte sobre você</label>
+        <textarea id="f-msg" name="mensagem" placeholder="O que gostaria de tratar ou melhorar?"></textarea>
+      </div>
+      <div class="field">
+        <label class="consent" for="f-ok" style="text-transform:none;letter-spacing:0;font-weight:400;font-size:13px">
+          <input id="f-ok" type="checkbox" required aria-required="true">
+          <span>Concordo com a <a href="#contato">Política de Privacidade</a> e autorizo o contato da Uniclínica Terê.</span>
+        </label>
+        <span class="err" aria-live="polite"></span>
+      </div>
+      <button type="submit" class="submit">Agendar pelo WhatsApp</button>
+      <div class="success" id="success" role="status">Obrigada! Estamos abrindo o WhatsApp com a sua mensagem. Em breve confirmamos o seu horário.</div>
+    </form>
+  </div>
+</section>
+</main>
+
+<!-- RODAPÉ -->
+<footer class="footer">
+  <span>© <span id="year">2026</span> Uniclínica Terê — Estética Avançada</span>
+  <nav aria-label="Rodapé">
+    <a href="#sobre" data-scroll>Sobre</a>
+    <a href="#tratamentos" data-scroll>Tratamentos</a>
+    <a href="#processo" data-scroll>Processo</a>
+    <a href="#diferenciais" data-scroll>Diferenciais</a>
+    <a href="#contato" data-scroll>Contato</a>
+  </nav>
+  <div class="contacts">
+    <a href="https://wa.me/5521993016638" target="_blank" rel="noopener">WhatsApp (21) 99301-6638</a>
+    <a href="https://www.google.com/maps/search/?api=1&amp;query=Unicl%C3%ADnica+Ter%C3%AA+Est%C3%A9tica+Avan%C3%A7ada+Teres%C3%B3polis" target="_blank" rel="noopener">R. Heitor de Moura Estevão, 229, sl. 421 — Vila Muqui, Teresópolis/RJ</a>
+    <a href="https://instagram.com/uniclinicatere" target="_blank" rel="noopener">@uniclinicatere</a>
+  </div>
+</footer>
+
+<script>
+(function(){
+  'use strict';
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var $ = function(s,c){return (c||document).querySelector(s)};
+  var $$ = function(s,c){return Array.prototype.slice.call((c||document).querySelectorAll(s))};
+  var clamp = function(v,a,b){return Math.min(b,Math.max(a,v))};
+  var vh = function(){return window.innerHeight};
+  // progresso 0→1 de um elemento alto em relação à viewport
+  function progress(el){
+    var r = el.getBoundingClientRect();
+    var total = r.height - vh();
+    return total > 0 ? clamp(-r.top/total,0,1) : (r.top < 0 ? 1 : 0);
+  }
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  /* ---------- Hero: título palavra por palavra ---------- */
+  var h1 = $('#heroTitle');
+  h1.innerHTML = h1.textContent.split(' ').map(function(w,i){
+    return '<span class="w" style="transition-delay:'+(i*90)+'ms">'+w+'</span>';
+  }).join(' ');
+
+  /* ---------- Hero: palavras ligadas ao scroll ---------- */
+  $$('.scrollwords').forEach(function(el){
+    el.innerHTML = el.textContent.split(' ').map(function(w){return '<span class="sw">'+w+'</span>'}).join(' ');
+  });
+  var heroWords = $$('.hero .sw');
+
+  /* ---------- Hero: marcas do grid de 12 colunas ---------- */
+  var marks = $('#gridMarks');
+  [0,0.5,1].forEach(function(y){
+    for(var c=0;c<=12;c++){
+      var i=document.createElement('i');
+      i.style.left=(c/12*100)+'%'; i.style.top=(y*100)+'%';
+      marks.appendChild(i);
+    }
+  });
+
+  /* ---------- Preloader ---------- */
+  var pre = $('#preloader');
+  function finishLoad(){
+    document.body.classList.add('loaded');
+    if(pre){ pre.classList.add('out'); setTimeout(function(){pre.remove()},1400); }
+  }
+  if(reduce || !pre){ if(pre) pre.remove(); document.body.classList.add('loaded'); }
+  else{
+    var stack = $('#stack');
+    var srcs = ['about-1','service-1','step-2','service-2','about-2','service-3'];
+    var cards = srcs.map(function(s){
+      var d=document.createElement('div');
+      d.className='card media';
+      d.style.setProperty('--r',(Math.random()*12-6).toFixed(2)+'deg');
+      d.innerHTML='<img src="img/'+s+'.jpg" width="240" height="300" alt="" onerror="this.style.display=\'none\'">';
+      stack.appendChild(d); return d;
+    });
+    cards.forEach(function(c,i){ setTimeout(function(){c.classList.add('on')}, 150+i*180); });
+    var count=$('#count'), t0=performance.now(), dur=2400;
+    (function tick(now){
+      var p=clamp((now-t0)/dur,0,1);
+      count.textContent=Math.round(p*100);
+      if(p<1) requestAnimationFrame(tick); else finishLoad();
+    })(t0);
+  }
+
+  /* ---------- Header: claro após o hero ---------- */
+  var header=$('#header'), hero=$('.hero');
+
+  /* ---------- Rolagem suave com offset de 64px ---------- */
+  var menu=$('#mobileMenu'), menuBtn=$('#menuBtn');
+  function setMenu(open){
+    menu.classList.toggle('open',open);
+    menu.setAttribute('aria-hidden',!open);
+    menuBtn.setAttribute('aria-expanded',open);
+    document.body.style.overflow=open?'hidden':'';
+  }
+  menuBtn.addEventListener('click',function(){setMenu(true)});
+  $('#menuClose').addEventListener('click',function(){setMenu(false)});
+  $$('[data-scroll]').forEach(function(a){
+    a.addEventListener('click',function(e){
+      var id=a.getAttribute('href'); var t=$(id);
+      if(!t) return;
+      e.preventDefault(); setMenu(false);
+      var y = id==='#inicio' ? 0 : t.getBoundingClientRect().top + window.scrollY - 64;
+      window.scrollTo({top:y,behavior:reduce?'auto':'smooth'});
+    });
+  });
+
+  /* ---------- Sobre: lista, cross-fade e missão ---------- */
+  var aboutTrack=$('#aboutTrack'), diffs=$$('#diffs li'), aboutCard=$('#aboutCard'), mission=$('#mission');
+  mission.innerHTML = mission.textContent.split(' ').map(function(w){return '<span class="mw">'+w+'</span>'}).join(' ');
+  var mWords=$$('.mw',mission);
+
+  /* ---------- Serviços: parallax ---------- */
+  var svcs=$$('.svc');
+
+  /* ---------- Processo: etapas fixas ---------- */
+  var process=$('#processo'), stepsEl=$('#steps'), stepLis=$$('#steps li'), stepMedia=$('#stepMedia'), stepImg=$('#stepImg'), stepText=$('#stepText');
+  var stepCopy=[
+    'Uma conversa sem pressa para entender sua rotina, sua pele e o resultado que você deseja.',
+    'Cada plano une técnica, tecnologia e os ativos certos para a sua individualidade.',
+    'Sessões em ambiente acolhedor, com equipamentos de última geração e todo o conforto.',
+    'Orientações claras de cuidados em casa para potencializar e manter o seu resultado.',
+    'Confiança renovada para viver a sua melhor versão, todos os dias.'
+  ];
+  var activeStep=-1;
+  function setStep(i){
+    if(i===activeStep) return; activeStep=i;
+    stepLis.forEach(function(li,k){li.classList.toggle('active',k===i)});
+    var h=stepLis[0].offsetHeight;
+    stepsEl.style.transform='translateY('+(-(i+0.5)*h)+'px)';
+    stepText.textContent=stepCopy[i];
+    if(reduce){ stepImg.src='img/step-'+(i+1)+'.jpg'; return; }
+    stepMedia.classList.add('flip');
+    stepImg.src='img/step-'+(i+1)+'.jpg';
+    stepImg.style.display='';
+    void stepMedia.offsetWidth;
+    stepMedia.classList.remove('flip');
+  }
+  setStep(0);
+
+  /* ---------- Equipe: entrada com blur ---------- */
+  var members=$$('.member');
+  if('IntersectionObserver' in window && !reduce){
+    var io=new IntersectionObserver(function(es){
+      es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+    },{threshold:.2});
+    members.forEach(function(m){io.observe(m)});
+  } else members.forEach(function(m){m.classList.add('in')});
+
+  /* ---------- Loop de scroll (rAF) ---------- */
+  var heroMedia=$('#heroMedia'), appears=$$('[data-hero-appear]'), ticking=false;
+  function onScroll(){
+    ticking=false;
+    var desktop = window.innerWidth >= 900;
+    // header
+    header.classList.toggle('light', hero.getBoundingClientRect().bottom <= 64);
+    // hero
+    var hp=progress(hero);
+    appears.forEach(function(el){ el.classList.toggle('in', hp>0.04 || !desktop) });
+    var n=heroWords.length;
+    heroWords.forEach(function(w,i){ w.classList.toggle('lit', hp > 0.05 + (i/n)*0.6) });
+    var clip = clamp((hp-0.72)/0.28,0,1)*100;
+    heroMedia.style.clipPath = clip>0 ? 'inset(0 0 '+clip+'% 0)' : '';
+    // sobre
+    if(desktop){
+      var ap=progress(aboutTrack);
+      var idx=clamp(Math.floor(ap*diffs.length),0,diffs.length-1);
+      diffs.forEach(function(li,k){li.classList.toggle('active',k===idx)});
+      aboutCard.classList.toggle('swap', ap>=0.5);
+      var mw=mWords.length;
+      mWords.forEach(function(w,i){ w.classList.toggle('lit', ap > (i/mw)*0.85) });
+    } else {
+      var r=aboutTrack.getBoundingClientRect();
+      var lp=clamp((vh()-r.top)/(r.height+vh()*0.2),0,1);
+      diffs.forEach(function(li,k){li.classList.toggle('active',k===clamp(Math.floor(lp*5),0,4))});
+      aboutCard.classList.toggle('swap', lp>=0.5);
+      mWords.forEach(function(w,i){ w.classList.toggle('lit', lp > (i/mWords.length)*0.8) });
+    }
+    // serviços (parallax)
+    if(desktop && !reduce){
+      svcs.forEach(function(c){
+        var r=c.parentNode.getBoundingClientRect();
+        var center=r.top + r.height/2 - vh()/2;
+        var s=parseFloat(c.dataset.speed);
+        c.style.transform='translate3d(0,'+(center*(1-s))+'px,0)';
+      });
+    }
+    // processo
+    var pp=progress(process);
+    setStep(clamp(Math.floor(pp*5),0,4));
+  }
+  function req(){ if(!ticking){ ticking=true; requestAnimationFrame(onScroll); } }
+  window.addEventListener('scroll',req,{passive:true});
+  window.addEventListener('resize',function(){ activeStep=-1; req(); });
+  onScroll();
+
+  /* ---------- Contato: máscara, validação e WhatsApp ---------- */
+  var form=$('#form'), tel=$('#f-tel'), success=$('#success');
+  tel.addEventListener('input',function(){
+    var d=tel.value.replace(/\D/g,'').slice(0,11), o='';
+    if(d.length>0) o='('+d.slice(0,2);
+    if(d.length>=3) o+=') '+d.slice(2, d.length>10?7:6);
+    if(d.length>=7) o+='-'+d.slice(d.length>10?7:6);
+    tel.value=o;
+  });
+  function check(input){
+    var f=input.closest('.field'), err=f.querySelector('.err'), msg='';
+    if(input.type==='checkbox'){ if(!input.checked) msg='Aceite a política para continuar.'; }
+    else if(!input.value.trim()) msg='Campo obrigatório.';
+    else if(input.type==='email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(input.value)) msg='Informe um e-mail válido.';
+    else if(input.type==='tel' && input.value.replace(/\D/g,'').length<10) msg='Informe um telefone com DDD.';
+    f.classList.toggle('invalid',!!msg);
+    input.setAttribute('aria-invalid',!!msg);
+    if(err) err.textContent=msg;
+    return !msg;
+  }
+  var required=$$('[required]',form);
+  required.forEach(function(i){ i.addEventListener('blur',function(){check(i)}); i.addEventListener('change',function(){check(i)}); });
+  form.addEventListener('submit',function(e){
+    e.preventDefault();
+    var ok=true, first=null;
+    required.forEach(function(i){ if(!check(i)){ ok=false; first=first||i; } });
+    if(!ok){ first.focus(); return; }
+    var v=function(id){return $(id).value.trim()};
+    var txt='Olá, Uniclínica Terê! Gostaria de agendar uma avaliação.%0A%0A'+
+      '*Nome:* '+encodeURIComponent(v('#f-nome'))+'%0A'+
+      '*Telefone:* '+encodeURIComponent(v('#f-tel'))+'%0A'+
+      (v('#f-email')?'*E-mail:* '+encodeURIComponent(v('#f-email'))+'%0A':'')+
+      '*Tratamento:* '+encodeURIComponent(v('#f-proc'))+
+      (v('#f-local')?'%0A*Localização:* '+encodeURIComponent(v('#f-local')):'')+
+      (v('#f-msg')?'%0A*Mensagem:* '+encodeURIComponent(v('#f-msg')):'');
+    success.classList.add('show');
+    window.open('https://wa.me/5521993016638?text='+txt,'_blank','noopener');
+    form.reset();
+  });
+})();
+</script>
+</body>
+</html>
